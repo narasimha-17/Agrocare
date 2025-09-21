@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Commodity Price Predictor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .prediction-result {
+      background-color: #e6f4ea;
+      color: #1b5e20;
+      border: 1px solid #a5d6a7;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0, 128, 0, 0.1);
+      animation: fadeIn 0.4s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    button {
+      margin: 5px 10px 0 0;
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.2s;
+    }
+
+    button:hover { background-color: #45a049; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-green-100 via-white to-green-50 min-h-screen">
+
+  <!-- NAVBAR -->
+  <nav class="bg-green-700 text-white shadow-md px-6 py-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="/" class="text-2xl font-bold">AgroSmart</a>
+      <div class="space-x-6 text-sm md:text-base">
+        <a href="/" class="hover:text-green-200">Home</a>
+        <a href="{{ url_for('agro_services') }}" class="hover:text-green-200">Agro Services</a>
+        <a href="{{ url_for('detect_disease') }}" class="hover:text-green-200">Disease Detection</a>
+        <a href="{{ url_for('contact') }}" class="hover:text-green-200">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN FORM -->
+  <div class="flex items-center justify-center px-4 py-10">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-8">
+      <h2 class="text-3xl font-bold text-green-700 text-center mb-6">Commodity Price Predictor</h2>
+
+      <!-- Voice Input Button -->
+      <div class="flex items-center mb-4">
+        <input type="text" id="commodity" name="commodity" placeholder="Say or type commodity name"
+               value="{{ request.form.get('commodity', '') }}"
+               class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
+        <button type="button" id="micBtn">🎤 Speak</button>
+      </div>
+
+      <form id="priceForm" method="POST" action="/price-commodity" class="space-y-4">
+        <div>
+          <label for="state" class="block font-medium text-gray-700">State:</label>
+          <input type="text" name="state" id="state" value="{{ request.form.get('state', '') }}" required
+                 class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
+        </div>
+
+        <div>
+          <label for="district" class="block font-medium text-gray-700">District:</label>
+          <input type="text" name="district" id="district" value="{{ request.form.get('district', '') }}" required
+                 class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
+        </div>
+
+        <div>
+          <label for="market" class="block font-medium text-gray-700">Market:</label>
+          <input type="text" name="market" id="market" value="{{ request.form.get('market', '') }}" required
+                 class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
+        </div>
+
+        <div>
+          <label for="variety" class="block font-medium text-gray-700">Variety:</label>
+          <input type="text" name="variety" id="variety" value="{{ request.form.get('variety', '') }}"
+                 class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
+        </div>
+
+        <button type="submit" class="w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition duration-200">
+          Predict Price
+        </button>
+        <button type="button" onclick="resetForm()">Reset</button>
+      </form>
+
+      <!-- Prediction Result -->
+      {% if prediction %}
+        <div class="prediction-result" id="prediction-container">
+          <p>💰 Predicted Modal Price: ₹{{ prediction }}</p>
+        </div>
+        <script>
+          // Voice output for prediction
+          const utterance = new SpeechSynthesisUtterance("Predicted price is {{ prediction }} rupees");
+          utterance.lang = navigator.language || 'en-US';
+          speechSynthesis.speak(utterance);
+        </script>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <!-- VOICE INPUT SCRIPT -->
+  <script>
+    const micBtn = document.getElementById("micBtn");
+    const commodityInput = document.getElementById("commodity");
+    micBtn.addEventListener('click', () => {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = navigator.language || 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const speechResult = event.results[0][0].transcript.toLowerCase();
+        commodityInput.value = speechResult;
+      };
+
+      recognition.onerror = (event) => {
+        alert("🎙️ Voice input error: " + event.error);
+      };
+    });
+
+    // Reset function
+    function resetForm() {
+      document.getElementById("priceForm").reset();
+      const predictionContainer = document.getElementById("prediction-container");
+      if (predictionContainer) predictionContainer.style.display = "none";
+    }
+  </script>
+
+</body>
+</html>

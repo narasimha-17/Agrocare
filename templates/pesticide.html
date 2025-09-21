@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pesticide Suggestion</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f9f3;
+      color: #222;
+    }
+
+    /* NAVIGATION BAR */
+    .navbar {
+      background-color: #2e7d32;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .navbar .brand {
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .navbar-links a:hover {
+      color: #c8e6c9;
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1b5e20;
+    }
+
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #e8f5e9;
+      border-left: 5px solid #388e3c;
+      border-radius: 6px;
+      font-size: 17px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-links {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION BAR (Same as index) -->
+  <div class="navbar">
+    <a class="brand" href="/">AgroSmart</a>
+    <div class="navbar-links">
+      <a href="/">Home</a>
+      <a href="{{ url_for('agro_services') }}">Agro Services</a>
+      <a href="{{ url_for('detect_disease') }}">Disease Detection</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h2>Pesticide Suggestion</h2>
+    <form method="POST" action="/predict_pesticide">
+      <label for="pest">Pest Detected</label>
+      <input type="text" id="pest" name="pest" placeholder="e.g., Aphids, Whiteflies, Mealybugs" required />
+      <button type="submit">Get Suggestion</button>
+    </form>
+
+    {% if prediction %}
+      <div class="result">
+        <strong>Suggested Pesticide:</strong> {{ prediction }}
+      </div>
+    {% endif %}
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subsidy & Loan Recommendations | AgroCare</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0; padding: 0;
+      background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+      color: #333;
+    }
+
+    .header {
+      background: #2e7d32;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+    .header nav a {
+      margin: 0 12px;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .header nav a:hover {
+      color: #ffeb3b;
+    }
+
+    .header nav a.active {
+      font-weight: bold;
+      border-bottom: 2px solid #ffeb3b;
+    }
+
+    .subsidy-container {
+      max-width: 750px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 25px;
+    }
+
+    .subsidy-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .subsidy-form label {
+      position: absolute;
+      top: -10px;
+      left: 15px;
+      background: white;
+      padding: 0 5px;
+      font-size: 14px;
+      color: #2e7d32;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #c8e6c9;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+
+    select:focus {
+      border-color: #2e7d32;
+      outline: none;
+      box-shadow: 0 0 8px rgba(46,125,50,0.3);
+    }
+
+    button {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 12px;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 18px;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    button:hover {
+      background: #1b5e20;
+      transform: scale(1.05);
+    }
+
+    .subsidy-result {
+      margin-top: 25px;
+      background: #e8f5e9;
+      padding: 20px;
+      border-left: 6px solid #2e7d32;
+      border-radius: 8px;
+      animation: highlight 1s ease-in-out;
+    }
+
+    @keyframes highlight {
+      from { background: #c8e6c9; }
+      to { background: #e8f5e9; }
+    }
+
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      padding: 15px;
+      background: #f1f8e9;
+      border-top: 2px solid #c8e6c9;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>🌱 AgroCare - Subsidy & Loan Recommendations</h1>
+    <nav>
+    <a href="/" class="active">Home</a>
+    <a href="{{ url_for('agro_services') }}">Agro Services</a>
+    <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+    <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
+    <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
+  </nav>
+  </header>
+
+  <section class="subsidy-container">
+    <h2>Find Suitable Subsidies & Loan Schemes</h2>
+    <form action="{{ url_for('get_subsidy') }}" method="post" class="subsidy-form">
+      <div class="form-group">
+        <label for="crop">Select Crop</label>
+        <select name="crop" id="crop" required>
+          <option value="">-- Choose a Crop --</option>
+          <option value="wheat">Wheat</option>
+          <option value="rice">Rice</option>
+          <option value="maize">Maize</option>
+          <option value="cotton">Cotton</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="need">Purpose</label>
+        <select name="need" id="need" required>
+          <option value="">-- Select Purpose --</option>
+          <option value="fertilizer">Fertilizer Support</option>
+          <option value="equipment">Farm Equipment</option>
+          <option value="irrigation">Irrigation</option>
+          <option value="loan">Loan</option>
+        </select>
+      </div>
+
+      <button type="submit"> Get Recommendations</button>
+    </form>
+
+    {% if subsidy %}
+      <div class="subsidy-result">
+        <h3>✅ Recommended Subsidy / Loan</h3>
+        <p>{{ subsidy }}</p>
+      </div>
+    {% endif %}
+  </section>
+
+  <footer>
+    <p>© 2025 AgroCare | Smart Farming Solutions</p>
+  </footer>
+
+  <script>
+    // Small interactive animation
+    document.querySelectorAll("select").forEach(select => {
+      select.addEventListener("change", () => {
+        select.style.borderColor = "#66bb6a";
+      });
+    });
+  </script>
+</body>
+</html>

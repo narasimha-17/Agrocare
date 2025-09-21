@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soil Prediction - AgroSmart</title>
+  <style>
+    /* ===== GLOBAL ===== */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #e0f7fa, #ffffff, #c8e6c9);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      background: #2e7d32;
+      color: white;
+      padding: 15px 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    nav h1 {
+      font-size: 26px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #f1f1f1;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #a5d6a7;
+    }
+
+    /* ===== CARD ===== */
+    .glass {
+      max-width: 650px;
+      width: 100%;
+      background: rgba(255,255,255,0.95);
+      border-radius: 1rem;
+      padding: 40px;
+      margin: auto;
+      margin-top: 50px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #2e7d32;
+      margin-bottom: 25px;
+    }
+
+    /* ===== FORM ===== */
+    form div {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #2e7d32;
+      box-shadow: 0 0 8px rgba(46,125,50,0.3);
+      outline: none;
+    }
+
+    /* ===== BUTTON ===== */
+    button {
+      width: 100%;
+      background: #2e7d32;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #1b5e20;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(27,94,32,0.4);
+    }
+
+    /* ===== PREDICTION RESULT ===== */
+    .prediction-box {
+      margin-top: 25px;
+      padding: 20px;
+      background: #e8f5e9;
+      border-left: 6px solid #2e7d32;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(46,125,50,0.2);
+      animation: slideIn 0.6s ease forwards;
+    }
+
+    .prediction-box h3 {
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      color: #1b5e20;
+    }
+
+    .prediction-box p {
+      font-size: 16px;
+      color: #444;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav a { margin: 5px 0 0 0; display: block; }
+      .glass { padding: 25px; margin-top: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <h1>AgroSmart</h1>
+    <div>
+      <a href="/">Home</a>
+      <a href="{{ url_for('agro_services') }}">Agro Services</a>
+      <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Soil Prediction Card -->
+  <section>
+    <div class="glass">
+      <h2>Soil Prediction</h2>
+      <form method="POST" action="/soil-prediction">
+        <div>
+          <label for="ph">Soil pH</label>
+          <input type="number" id="ph" name="ph" step="0.1" placeholder="e.g. 6.5" required>
+        </div>
+        <div>
+          <label for="nitrogen">Nitrogen (N)</label>
+          <input type="number" id="nitrogen" name="nitrogen" placeholder="mg/kg" required>
+        </div>
+        <div>
+          <label for="phosphorus">Phosphorus (P)</label>
+          <input type="number" id="phosphorus" name="phosphorus" placeholder="mg/kg" required>
+        </div>
+        <div>
+          <label for="potassium">Potassium (K)</label>
+          <input type="number" id="potassium" name="potassium" placeholder="mg/kg" required>
+        </div>
+        <div>
+          <label for="moisture">Moisture (%)</label>
+          <input type="number" id="moisture" name="moisture" step="0.1" placeholder="e.g. 12.5" required>
+        </div>
+        <button type="submit">Predict Soil Type</button>
+      </form>
+
+      {% if soil_prediction %}
+      <div class="prediction-box">
+        <h3>Prediction:</h3>
+        <p>{{ soil_prediction }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroLink</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: linear-gradient(120deg, #f0fff0, #e0f7fa, #fff3e0);
+      background-size: 600% 600%;
+      animation: animatedBackground 10s ease infinite;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    @keyframes animatedBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero {
+      background: linear-gradient(to right, #00a859, #0077b6);
+      color: white;
+      padding: 70px 0;
+      text-align: center;
+    }
+    .card {
+      border-radius: 16px;
+      background-color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .form-label {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+    .btn-success:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
+    }
+    footer {
+      background-color: #f8f9fa;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .floating-icon {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.3;
+      animation: floatIcons 18s linear infinite;
+    }
+
+    @keyframes floatIcons {
+      0% {
+        transform: translateY(100vh) translateX(0);
+      }
+      100% {
+        transform: translateY(-120vh) translateX(40px);
+      }
+    }
+
+        .carousel {
+      margin-bottom: 50px;
+    }
+
+    .scroll-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      gap: 25px;
+      padding-bottom: 10px;
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .scroll-container::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 6px;
+    }
+
+    .crop-card {
+      flex: 0 0 auto;
+      width: 250px;
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .crop-card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    .crop-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .crop-name {
+      padding: 16px;
+      font-size: 20px;
+      text-align: center;
+      font-weight: 600;
+      color: #388e3c;
+    }
+
+    @media screen and (max-width: 768px) {
+      .crop-card {
+        width: 180px;
+      }
+
+      .crop-card img {
+        height: 140px;
+      }
+
+      .crop-name {
+        font-size: 16px;
+        padding: 12px;
+      }
+
+      h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="bg-white shadow-sm py-3">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h4 class="mb-0 fw-bold text-success">AgroLink</h4>
+    <nav>
+      <a href="#" class="text-dark mx-2">Home</a>
+      <a href="{{ url_for('agro_services') }}" class="text-dark mx-2">Agro Services</a>
+      <a href="{{ url_for('detect_disease') }}" class="text-dark mx-2">Detect Diseases</a>
+      <a href="{{ url_for('subsidy') }}" class="text-dark mx-2 active">Subsidy & Loans</a>
+      <a href="{{ url_for('crop_guide') }}" class="text-dark mx-2">Crop Guide</a>
+      <a href="{{ url_for('price_tracking') }}" class="text-dark mx-2">Price Tracking</a>
+      <a href="{{ url_for('contact') }}" class="text-dark mx-2">Contact</a>
+    </nav>
+  </div>
+</header>
+
+
+
+
+
+
+ <!-- Floating crop icons -->
+  <div class="floating-icon" style="left: 10%; animation-delay: 0s;">🌾</div>
+  <div class="floating-icon" style="left: 25%; animation-delay: 1s;">🌽</div>
+  <div class="floating-icon" style="left: 40%; animation-delay: 7s;">🥔</div>
+  <div class="floating-icon" style="left: 60%; animation-delay: 4s;">🍅</div>
+  <div class="floating-icon" style="left: 75%; animation-delay: 3s;">🥕</div>
+  <div class="floating-icon" style="left: 10%; animation-delay: 0s;">🌾</div>
+  <div class="floating-icon" style="left: 25%; animation-delay: 4s;">🌽</div>
+  <div class="floating-icon" style="left: 40%; animation-delay: 10s;">🥔</div>
+  <div class="floating-icon" style="left: 60%; animation-delay: 9s;">🍅</div>
+  <div class="floating-icon" style="left: 75%; animation-delay: 8s;">🥕</div>
+
+
+<section class="hero">
+  <div class="container">
+    <h1 class="display-5 fw-bold">AgroLink Prediction Portal</h1>
+    <p class="lead">Empowering farmers with AI-driven solutions for crop health, soil insights, and weather-based recommendations.</p>
+  </div>
+</section>
+
+<section class="py-5" id="features">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card p-4 mb-4">
+          <h5 class="fw-bold text-success">Crop Prediction</h5>
+          <p>Get the best crop recommendations based on soil nutrients, weather, and regional data to maximize yield.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 mb-4">
+          <h5 class="fw-bold text-success">Soil & Fertilizer Insights</h5>
+          <p>Analyze soil pH, nitrogen, and potassium levels to get suitable fertilizer suggestions and soil treatment tips.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 mb-4">
+          <h5 class="fw-bold text-success">Climate Advisory</h5>
+          <p>Stay updated with rainfall, humidity, and temperature insights to plan your agricultural activities efficiently.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card p-4 mb-4">
+          <h5 class="fw-bold text-success">Smart Agriculture Tips</h5>
+          <ul>
+            <li>🪴 Rotate crops regularly to maintain soil fertility and avoid pests.</li>
+            <li>💧 Use drip irrigation to conserve water and improve efficiency.</li>
+            <li>🧪 Regular soil testing ensures appropriate fertilizer application.</li>
+            <li>📈 Monitor local weather forecasts to optimize planting schedules.</li>
+            <li>🌾 Practice intercropping and organic farming for long-term gains.</li>
+            <li>🚜 Use AI-powered apps like AgroLink for data-driven decisions on planting, fertilizing, and harvesting.</li>
+            <li>🌿 Adopt integrated pest management (IPM) strategies to reduce chemical usage.</li>
+            <li>🌞 Consider solar-powered pumps and tools for sustainable farming practices.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- 🌾 Chatbot Section -->
+<section class="container mt-5 mb-5" id="chatbot">
+  <h3 class="text-center mb-4">🤖 Ask Agrosis AI</h3>
+  <div class="chatbox p-4 bg-light rounded shadow-sm">
+<div id="chatBox" class="d-flex flex-column p-3" style="height: 200px; overflow-y: auto;"></div>
+
+<div class="input-group mt-2">
+  <input type="text" id="userInput" class="form-control" placeholder="Ask something..." />
+  <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+</div>
+
+  </div>
+</section>
+
+
+
+
+
+<section>
+
+ <h2>🌿 Crop Gallery</h2>
+  <div class="carousel">
+    <div class="scroll-container">
+      <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1592997571659-0b21ff64313b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHJpY2V8ZW58MHx8MHx8fDA%3D" alt="Rice">
+        <div class="crop-name">Rice</div>
+      </div>
+      <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1564493031643-4be2c4347a17?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHdoZWF0fGVufDB8fDB8fHww" alt="Wheat">
+        <div class="crop-name">Wheat</div>
+      </div>
+      <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/1171353575/photo/sweetcorn.webp?a=1&b=1&s=612x612&w=0&k=20&c=TNOYbzjiKTHBLH6Yrqq4wZBbrK6qHc6LN0wvOM-n-YU=" alt="Maize">
+        <div class="crop-name">Maize</div>
+      </div>
+      <div class="crop-card">
+        <img src="https://plus.unsplash.com/premium_photo-1700089335703-ccb4805b35c7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8UGlnZW9uJTIwUGVhc3xlbnwwfHwwfHx8MA%3D%3D" alt="Pigeon Peas">
+        <div class="crop-name">Pigeon Peas</div>
+      </div>
+      <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/985465242/photo/roasted-masala-chickpea-chana-known-as-chatpata-futana-or-phutana-in-hindi-served-in-a-bowl.webp?a=1&b=1&s=612x612&w=0&k=20&c=pIzmx98gq2PyBvjHKatb9Es-4a9a9X9PaAH-ngoeREA=" alt="Chickpea">
+        <div class="crop-name">Chickpea</div>
+      </div>
+
+      <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/1369543877/photo/oat-flake-oatmeal-in-a-bowl-vertical-photo.webp?a=1&b=1&s=612x612&w=0&k=20&c=BIETZ3gcaia4RA3k55ZuZN7Bk_UIzSy8vifaDhhvp8A=" alt="Oats">
+        <div class="crop-name">Oats</div>
+      </div>
+
+       <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/907567632/photo/close-up-of-millet-in-the-field.webp?a=1&b=1&s=612x612&w=0&k=20&c=fV-U9dM0Zf883R81LhpcFWmbXvidq9NytBwmE7US3v8=" alt="Oats">
+        <div class="crop-name">Sorghum</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/1199246385/photo/urad-dal-black-gram-vigna-mungo-in-wooden-bowl-on-white-background.jpg?s=612x612&w=0&k=20&c=drbPT-puFJotxxek-oEQzqzClYlJtdBBo-t8tnA6inw=" alt="Urad Dal">
+        <div class="crop-name">Black Gram</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/1305426201/photo/close-up-of-organic-green-gram-or-whole-green-moong-dal-on-a-ceramic-white-bowl.jpg?s=612x612&w=0&k=20&c=fuztDb2Ib-vZV4r_lxN0IbJKPnRwVORu8SwPUJ9hr68=" alt="Moong Dal">
+        <div class="crop-name">Moong Dal</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1545587163-44a5e98b9f99?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fEtpZG5leSUyMEJlYW5zJTIwcGxhbnR8ZW58MHx8MHx8fDA%3D" alt="Oats">
+        <div class="crop-name">Kidney Beans</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8UG90YXRvfGVufDB8fDB8fHww" alt="Potato">
+        <div class="crop-name">Potato</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1471194402529-8e0f5a675de6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHRvbWF0b3xlbnwwfHwwfHx8MA%3D%3D" alt="Oats">
+        <div class="crop-name">Tomato</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1620036924477-c3d6e9ce36fc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YmFuYW5hJTIwcGxhbnR8ZW58MHx8MHx8fDA%3D" alt="Oats">
+        <div class="crop-name">Kidney Beans</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/487739784/photo/mango-tree.webp?a=1&b=1&s=612x612&w=0&k=20&c=XI1THM7WPrO0MyKGlCiZf6AuSIArmufPdSqVs00HCvk=" alt="Mango">
+        <div class="crop-name">Mango</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/121286472/photo/baby-spinach-in-the-garden.webp?a=1&b=1&s=612x612&w=0&k=20&c=hAGx73y2G-5ZMW0yaPi0YBzbUk_nAldt09ab0m9REJE=" alt="Oats">
+        <div class="crop-name">Spinach</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1580201092675-a0a6a6cafbb1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fG9uaW9ufGVufDB8fDB8fHww" alt="Oats">
+        <div class="crop-name">Onion</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1502395809857-fd80069897d0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y290dG9ufGVufDB8fDB8fHww" alt="Oats">
+        <div class="crop-name">Cotton</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/93541349/photo/sugar-cane-plantation.webp?a=1&b=1&s=612x612&w=0&k=20&c=q-x3fulEUxWan5nnmS7PgUvqvuJfls40TKQlUUMeiDY=" alt="Oats">
+        <div class="crop-name">SugarCane</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2Fycm90fGVufDB8fDB8fHww" alt="Oats">
+        <div class="crop-name">Carrot</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/503603245/photo/white-dragon-fruit.webp?a=1&b=1&s=612x612&w=0&k=20&c=UjcS99wnrKg7xSKqCBzJ-_i_vAIwl5tpS78BPIjM7iA=" alt="Oats">
+        <div class="crop-name">Dragon fruit</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/1328668312/photo/whole-eggplant-on-wooden-background.webp?a=1&b=1&s=612x612&w=0&k=20&c=41e1ywWjW-MpbKaFjNQ7LxVlCJ9kP079FMqHPEjmhJI=" alt="Oats">
+        <div class="crop-name">Brinjal</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://images.unsplash.com/photo-1621409443141-46c42dc0afb5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGluZSUyMGFwcGxlfGVufDB8fDB8fHww" alt="Oats">
+        <div class="crop-name">Pine Apple</div>
+      </div>
+
+            <div class="crop-card">
+        <img src="https://media.istockphoto.com/id/480915274/photo/fresh-melon.webp?a=1&b=1&s=612x612&w=0&k=20&c=-L4sIc3KDJlGD6cLpdTMCAhi6JyZQ0sw2ZKiAJT74ZM=" alt="Oats">
+        <div class="crop-name">Musk Melon</div>
+      </div>
+
+
+            </div>
+     
+           
+      <!-- Add more crop cards below -->
+
+      </div>
+      </div>
+
+</section>
+
+
+
+
+
+
+<footer class="py-4 border-top" id="contact">
+  <div class="container text-center">
+    <small class="text-muted">&copy; 2025 AI-Agrosis | AgroLink | Powered by Smart ML Solutions</small>
+  </div>
+</footer>
+
+
+<script>
+  async function sendMessage() {
+    const input = document.getElementById("userInput");
+    const chatBox = document.getElementById("chatBox");
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    // Append user's message
+    chatBox.innerHTML += `
+      <div class="user align-self-end bg-success text-white p-2 rounded mb-2" style="max-width: 75%;">
+        ${message}
+      </div>
+    `;
+    input.value = "";
+
+    // Add typing indicator
+    const typingMsg = document.createElement("div");
+    typingMsg.className = "bot align-self-start bg-light text-dark p-2 rounded mb-2";
+    typingMsg.innerText = "Typing...";
+    chatBox.appendChild(typingMsg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+      const response = await fetch("http://localhost:5000/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+      typingMsg.remove();
+
+      // Append bot's reply
+      chatBox.innerHTML += `
+        <div class="bot align-self-start bg-light text-dark p-2 rounded mb-2" style="max-width: 75%;">
+          ${data.reply}
+        </div>
+      `;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+    } catch (err) {
+      typingMsg.remove();
+
+      chatBox.innerHTML += `
+        <div class="bot bg-danger text-white p-2 rounded mb-2">
+          ❌ Error: Could not connect to Gemini API
+        </div>
+      `;
+    }
+  }
+
+  // Optional: Press Enter to send message
+  document.getElementById("userInput").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") sendMessage();
+  });
+</script>
+
+
+
+</body>
+</html>

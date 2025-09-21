@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us - AgroLink</title>
+  <style>
+    /* ======== GLOBAL STYLING ======== */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #e0f7fa, #ffffff, #e8f5e9);
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      color: #1b5e20;
+      margin-bottom: 15px;
+    }
+
+    p { color: #444; line-height: 1.6; }
+
+    /* ======== NAVBAR ======== */
+    nav {
+      background: linear-gradient(90deg, #2e7d32, #1565c0);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      padding: 8px 14px;
+      border-radius: 8px;
+    }
+
+    nav a:hover, nav a.active {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+
+    /* ======== INTRO ======== */
+    section.intro {
+      text-align: center;
+      padding: 60px 20px 30px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    section.intro p {
+      max-width: 750px;
+      margin: 0 auto;
+      font-size: 18px;
+    }
+
+    /* ======== CONTACT CARDS ======== */
+    .contact-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 40px auto;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .contact-card {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      flex: 1 1 400px;
+      min-width: 320px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    }
+
+    /* ======== FORM ======== */
+    form div { margin-bottom: 18px; text-align: left; }
+
+    label { font-weight: 600; display: block; margin-bottom: 5px; }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #1565c0;
+      box-shadow: 0 0 10px rgba(21, 101, 192, 0.3);
+    }
+
+    textarea { resize: vertical; }
+
+    button {
+      padding: 14px;
+      background: linear-gradient(90deg, #2e7d32, #1565c0);
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #1b5e20, #0d47a1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+
+    /* ======== TEAM ======== */
+    .team-section {
+      text-align: center;
+      margin: 60px 20px;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    .team-members {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .member-card {
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      padding: 20px;
+      width: 220px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeUp 0.8s ease-in-out;
+    }
+
+    .member-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.2);
+    }
+
+    .member-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 12px;
+      border: 3px solid #1565c0;
+    }
+
+    /* ======== HOME BUTTON ======== */
+    .home-button {
+      margin: 50px auto;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      background: linear-gradient(90deg, #1565c0, #2e7d32);
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .home-button:hover {
+      background: linear-gradient(90deg, #0d47a1, #1b5e20);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    /* ======== ANIMATIONS ======== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .contact-container { flex-direction: column; }
+      .team-members { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="/" class="active">Home</a>
+    <a href="{{ url_for('agro_services') }}">Agro Services</a>
+    <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+    <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
+    <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
+  </nav>
+
+  <!-- Intro -->
+  <section class="intro">
+    <h1>🚀 Empowering Farmers Through AI</h1>
+    <p>
+      At <strong>AI AgroSis</strong>, our goal is to leverage the power of Artificial Intelligence 
+      to help farmers make informed decisions — from detecting crop diseases early, 
+      to recommending optimal crops and providing real-time commodity price insights.  
+      Built for <b>Smart India Hackathon</b> 🌍 by a passionate student team.
+    </p>
+  </section>
+
+  <!-- Contact Section -->
+  <div class="contact-container">
+    <div class="contact-card contact-info">
+      <h2>📩 Contact Information</h2>
+      <p>We’d love to hear your feedback, questions, or suggestions.</p>
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:support@aiagrosis.com">support@aiagrosis.com</a></li>
+        <li><strong>Phone:</strong> <a href="tel:+919876543210">+91 98765 43210</a></li>
+        <li><strong>Location:</strong> AI AgroSis HQ, India</li>
+      </ul>
+    </div>
+
+    <div class="contact-card">
+      <h3>💬 Send a Message</h3>
+      <form method="POST" action="/send-message">
+        <div>
+          <label>Your Name</label>
+          <input type="text" name="name" required>
+        </div>
+        <div>
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+        <div>
+          <label>Message</label>
+          <textarea name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Team Section -->
+  <section class="team-section">
+    <h2>👨‍💻 Meet the Developers</h2>
+    <p>Built with passion and innovation by a student team committed to transforming agriculture with technology.</p>
+
+    <div class="team-members">
+      <div class="member-card">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Manas">
+        <h3>Manas</h3>
+        <p>AI integration, backend logic, and system design.</p>
+      </div>
+
+      <div class="member-card">
+        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Narasimha">
+        <h3>Narasimha</h3>
+        <p>Flask web framework, ML pipeline, and deployment.</p>
+      </div>
+
+      <div class="member-card">
+        <img src="https://randomuser.me/api/portraits/men/66.jpg" alt="Mitta Vinay Krishna Reddy">
+        <h3>Mitta Vinay Krishna Reddy</h3>
+        <p>Crop prediction logic and data workflow engineering.</p>
+      </div>
+
+      <div class="member-card">
+        <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="Tharun D">
+        <h3>Tharun D</h3>
+        <p>UI/UX design, responsive pages, and frontend styling.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Home Button -->
+  <a href="/" class="home-button">⬅ Back to Home</a>
+
+</body>
+</html>

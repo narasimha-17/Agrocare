@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Cultivation Guide | AgroCare</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+      color: #333;
+    }
+
+    header {
+      background: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #c8e6c9;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .guide-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .guide-header {
+      background: #4caf50;
+      color: white;
+      padding: 15px;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .guide-header span {
+      transition: transform 0.3s;
+    }
+
+    .guide-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.5s ease;
+      padding: 0 15px;
+    }
+
+    .guide-content.open {
+      max-height: 500px;
+      padding: 15px;
+    }
+
+    .guide-content p {
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #2e7d32;
+      color: white;
+      margin-top: 30px;
+    }
+
+    /* Animation for expand/collapse */
+    .rotate {
+      transform: rotate(90deg);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌱 AgroCare - Crop Cultivation Guide</h1>
+    <nav>
+       <a href="/" class="active">Home</a>
+    <a href="{{ url_for('agro_services') }}">Agro Services</a>
+    <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+    <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
+    <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
+    <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+  </header>
+
+  <div class="container">
+
+    <!-- Wheat -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Wheat Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Loamy soil with good drainage.</p>
+        <p><strong>Climate:</strong> Cool and dry weather.</p>
+        <p><strong>Sowing:</strong> November–December.</p>
+        <p><strong>Irrigation:</strong> Requires 4–6 irrigations at critical stages.</p>
+        <p><strong>Harvesting:</strong> Done when grains are hard and straw turns golden.</p>
+      </div>
+    </div>
+
+    <!-- Rice -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Rice Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Clayey soil with high water retention.</p>
+        <p><strong>Climate:</strong> Hot and humid.</p>
+        <p><strong>Sowing:</strong> June–July (Kharif Season).</p>
+        <p><strong>Irrigation:</strong> Requires standing water for most of the growth period.</p>
+        <p><strong>Harvesting:</strong> Done when grains are hard and panicles turn yellow.</p>
+      </div>
+    </div>
+
+    <!-- Cotton -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Cotton Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Black soil with high fertility.</p>
+        <p><strong>Climate:</strong> Warm climate with moderate rainfall.</p>
+        <p><strong>Sowing:</strong> April–May before monsoon.</p>
+        <p><strong>Irrigation:</strong> Requires moderate irrigation, avoid waterlogging.</p>
+        <p><strong>Harvesting:</strong> Done when cotton bolls burst open.</p>
+      </div>
+    </div>
+
+    <!-- Maize -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Maize Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Fertile, well-drained alluvial soil.</p>
+        <p><strong>Climate:</strong> Warm and moist, 21–27°C.</p>
+        <p><strong>Sowing:</strong> June–July (Kharif) or Oct–Nov (Rabi).</p>
+        <p><strong>Irrigation:</strong> Requires water at knee-high, tasseling, and grain-filling stages.</p>
+        <p><strong>Harvesting:</strong> Done when husk turns yellow and grains are hard.</p>
+      </div>
+    </div>
+
+    <!-- Sugarcane -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Sugarcane Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Deep, rich loamy soil.</p>
+        <p><strong>Climate:</strong> Tropical climate, 21–27°C.</p>
+        <p><strong>Planting:</strong> January–March.</p>
+        <p><strong>Irrigation:</strong> Needs frequent irrigation every 10–15 days.</p>
+        <p><strong>Harvesting:</strong> Ready in 10–12 months.</p>
+      </div>
+    </div>
+
+    <!-- Potato -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Potato Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Sandy loam, well-drained.</p>
+        <p><strong>Climate:</strong> Cool temperature, 15–20°C.</p>
+        <p><strong>Sowing:</strong> October–December.</p>
+        <p><strong>Irrigation:</strong> Moderate irrigation, avoid waterlogging.</p>
+        <p><strong>Harvesting:</strong> Done after 100–120 days.</p>
+      </div>
+    </div>
+
+    <!-- Tomato -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Tomato Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Sandy loam with good organic content.</p>
+        <p><strong>Climate:</strong> Warm climate, 20–25°C.</p>
+        <p><strong>Sowing:</strong> Jan–Feb or Jun–Jul.</p>
+        <p><strong>Irrigation:</strong> Requires irrigation every 7–10 days.</p>
+        <p><strong>Harvesting:</strong> 70–90 days after sowing.</p>
+      </div>
+    </div>
+
+    <!-- Banana -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Banana Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Rich loamy soil.</p>
+        <p><strong>Climate:</strong> Tropical climate, 25–30°C.</p>
+        <p><strong>Planting:</strong> Year-round in irrigated areas.</p>
+        <p><strong>Irrigation:</strong> Requires frequent irrigation.</p>
+        <p><strong>Harvesting:</strong> 12–15 months after planting.</p>
+      </div>
+    </div>
+
+    <!-- Mango -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Mango Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Well-drained loamy soil.</p>
+        <p><strong>Climate:</strong> Tropical to subtropical.</p>
+        <p><strong>Planting:</strong> June–July or Feb–March.</p>
+        <p><strong>Irrigation:</strong> Requires irrigation during flowering and fruiting.</p>
+        <p><strong>Harvesting:</strong> 3–6 years for grafted plants.</p>
+      </div>
+    </div>
+
+    <!-- Soybean -->
+    <div class="guide-card">
+      <div class="guide-header" onclick="toggleContent(this)">
+        Soybean Cultivation Guide <span>▶</span>
+      </div>
+      <div class="guide-content">
+        <p><strong>Soil:</strong> Fertile, well-drained soil.</p>
+        <p><strong>Climate:</strong> Warm, 20–30°C.</p>
+        <p><strong>Sowing:</strong> June–July (Kharif).</p>
+        <p><strong>Irrigation:</strong> Needs 3–4 irrigations.</p>
+        <p><strong>Harvesting:</strong> 90–120 days after sowing.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2025 AgroCare | Smart Farming Solutions</p>
+  </footer>
+
+  <script>
+    function toggleContent(element) {
+      const content = element.nextElementSibling;
+      const arrow = element.querySelector("span");
+      content.classList.toggle("open");
+      arrow.classList.toggle("rotate");
+    }
+  </script>
+
+</body>
+</html>

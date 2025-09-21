@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Recommendation - AI-Agrosis</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .glassy-alert {
+      margin: 1.5rem auto;
+      padding: 1.2rem 1.5rem;
+      width: fit-content;
+      max-width: 90%;
+    background: linear-gradient(135deg, #e0ffe9, #d4fcd4);
+    border: 2px solid rgba(34, 197, 94, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    color: #064e3b;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: popIn 0.6s ease-out;
+  }
+
+  .glassy-alert strong {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #065f46;
+  }
+
+  @keyframes popIn {
+    0% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+    body {
+      background: linear-gradient(45deg, #e6ffe6, #ffffff);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .recommendation-section {
+      margin-top: 80px;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .btn-recommend {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-recommend:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<header class="bg-white shadow-sm py-3">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h4 class="mb-0 fw-bold text-success">AgroLink: Crop Recommendation</h4>
+    <nav>
+      <a href="/" class="active">Home</a>
+    <a href="{{ url_for('agro_services') }}">Agro Services</a>
+    <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+    <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
+    <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
+    <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container recommendation-section">
+  <h2 class="text-primary text-center mb-4">Get Crop Recommendation</h2>
+  <form method="POST" action="/crop-recommendation" class="needs-validation" novalidate>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Nitrogen (N)</label>
+        <input type="number" step="any" name="nitrogen" value="{{ request.form.get('nitrogen', '') }}" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Phosphorus (P)</label>
+        <input type="number" step="any" name="phosphorus" value="{{ request.form.get('phosphorus', '') }}" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Potassium (K)</label>
+        <input type="number" step="any" name="potassium" value="{{ request.form.get('potassium', '') }}" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Temperature (°C)</label>
+        <input type="number" step="any" name="temperature" value="{{ request.form.get('temperature', '') }}" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Humidity (%)</label>
+        <input type="number" step="any" name="humidity" value="{{ request.form.get('humidity', '') }}" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">pH Level</label>
+        <input type="number" step="any" name="ph" value="{{ request.form.get('ph', '') }}" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label">Rainfall (mm)</label>
+      <input type="number" step="any" name="rainfall" value="{{ request.form.get('rainfall', '') }}" class="form-control" required>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-recommend">Recommend Crop</button>
+    </div>
+  </form>
+</div>
+{% if prediction %}
+  <div class="glassy-alert">
+    <span style="font-size: 1.5rem;">🌾</span>
+    Recommended Crop: <strong>{{ prediction }}</strong>
+  </div>
+{% endif %}
+
+<footer class="py-4 mt-5 border-top bg-white">
+  <div class="container text-center">
+    <small class="text-muted">&copy; 2025 AI-Agrosis | Powered by Smart ML Solutions</small>
+  </div>
+</footer>
+
+</body>
+</html>

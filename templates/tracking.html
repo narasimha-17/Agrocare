@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'en') }}">
+<head>
+  <meta charset="UTF-8">
+  <title>🌾 {{ _('Agriculture Market Price Tracker') }}</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      background:#f4f9f4; 
+      text-align:center; 
+      padding: 20px; 
+    }
+    h1 { color: #2c7a7b; margin-bottom: 5px; }
+    p { margin-bottom: 20px; font-size: 1.1em; }
+
+    /* Navbar */
+    .navbar {
+      background-color: #2e7d32;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .navbar .brand {
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .navbar-links { display: flex; gap: 20px; }
+    .navbar-links a {
+      color: white; text-decoration: none; font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .navbar-links a:hover { color: #c8e6c9; }
+
+    /* Language Selector */
+    .language-selector { margin-bottom: 20px; }
+    .language-selector select { padding: 5px 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ccc; }
+
+    /* Table Styling */
+    .table-container { overflow-x: auto; }
+    table { 
+      margin:20px auto; border-collapse: collapse; width: 80%; 
+      background: #fff; 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+      min-width: 500px;
+    }
+    th, td { border: 1px solid #ddd; padding: 12px; }
+    th { background:#4CAF50; color:white; text-transform: uppercase; }
+    tr:nth-child(even){background:#f2f2f2;}
+    tr:hover { background:#e0f7e0; }
+    .up { color: green; font-weight: bold; }
+    .down { color: red; font-weight: bold; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      th, td { padding: 8px; font-size: 0.9em; }
+      table { width: 100%; }
+    }
+
+    /* Refresh Button */
+    .refresh-btn {
+      background: #2e7d32;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+    }
+    .refresh-btn:hover { background: #1b5e20; }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <a class="brand" href="/">AgroSmart</a>
+    <div class="navbar-links">
+    <a href="/" class="active">Home</a>
+    <a href="{{ url_for('agro_services') }}">Agro Services</a>
+    <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+    <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
+    <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
+    <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+  </div>
+</div>
+
+  <!-- Title -->
+  <h1>🌾 {{ _('Agriculture Market Price Tracker') }}</h1>
+  <p>{{ _('Live commodity prices via Yahoo Finance') }}</p>
+
+  <!-- Language Selector -->
+
+
+  <!-- Refresh Button -->
+  <button class="refresh-btn" onclick="loadPrices()">🔄 {{ _('Refresh Now') }}</button>
+
+  <!-- Commodity Table -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ _('Commodity') }}</th>
+          <th>{{ _('Price (USD)') }}</th>
+          <th>{{ _('Unit') }}</th>
+          <th>{{ _('Timestamp') }}</th>
+        </tr>
+      </thead>
+      <tbody id="priceTable">
+        <tr><td colspan="4">⏳ Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- JS for live prices -->
+  <script>
+    const commodities = [
+      "wheat","corn","soybean","rice","cotton",
+      "coffee","sugar","cocoa","orange_juice"
+    ];
+
+    async function loadPrices() {
+  const table = document.getElementById("priceTable");
+  table.innerHTML = "";
+  for (let c of commodities) {
+    try {
+      const res = await fetch(`/api/commodity/${c}`);
+      const data = await res.json();
+
+      if (data.error) {
+        table.innerHTML += `<tr><td>${c}</td><td>Error</td><td>-</td><td>-</td></tr>`;
+      } else {
+        table.innerHTML += `
+          <tr>
+            <td>${c}</td>
+            <td>${data.price}</td>
+            <td>${data.unit}</td>
+            <td>${data.timestamp}</td>
+          </tr>`;
+      }
+    } catch (err) {
+      table.innerHTML += `<tr><td>${c}</td><td>Error</td><td>-</td><td>-</td></tr>`;
+    }
+  }
+}
+    window.onload = loadPrices;
+  </script>

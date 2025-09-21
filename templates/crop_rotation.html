@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ML Crop Rotation Suggestion</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background: linear-gradient(to right, #e6ffe6, #f2fff0);
+    }
+    .form-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .result-box {
+      background: #f8fff9;
+      border-left: 4px solid #28a745;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+
+<header class="bg-white shadow-sm py-3">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h4 class="mb-0 fw-bold text-success">AgroLink</h4>
+    <nav>
+     <a href="/" class="active">Home</a>
+    <a href="{{ url_for('agro_services') }}">Agro Services</a>
+    <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+    <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
+    <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
+    <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+  </div>
+</header>
+
+
+  <div class="container form-container">
+    <h3 class="text-center text-success mb-4">🌿 AI Crop Rotation Planner</h3>
+
+    <form method="POST" action="/crop_rotation">
+      <div class="form-group">
+        <label>Soil Type</label>
+        <select name="soil" class="form-control" required>
+          <option value="">--Select--</option>
+          <option>Loamy</option>
+          <option>Clay</option>
+          <option>Sandy</option>
+          <option>Black</option>
+          <option>Alluvial</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Region</label>
+        <input type="text" name="region" class="form-control" placeholder="e.g. Tamil Nadu, Punjab" required>
+      </div>
+
+      <div class="form-group">
+        <label>Season</label>
+        <select name="season" class="form-control" required>
+          <option value="">--Select--</option>
+          <option>Kharif</option>
+          <option>Rabi</option>
+          <option>Zaid</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Last Grown Crop</label>
+        <input type="text" name="last_crop" class="form-control" placeholder="e.g. Rice, Wheat" required>
+      </div>
+
+      <button type="submit" class="btn btn-success btn-block">🚀 Suggest Rotation</button>
+    </form>
+
+    {% if suggestion %}
+    <div class="result-box mt-4">
+      <h5 class="text-success">🌾 Suggested Crop Rotation Plan:</h5>
+      <p>{{ suggestion }}</p>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-3">
+      <a href="/" class="btn btn-outline-secondary">⬅ Home</a>
+    </div>
+  </div>
+</body>
+</html>
