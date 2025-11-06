@@ -8,9 +8,12 @@
     body {
       background: linear-gradient(to right, #e6ffe6, #f2fff0);
     }
+    header {
+      border-bottom: 2px solid #dfffd9;
+    }
     .form-container {
-      max-width: 600px;
-      margin: 50px auto;
+      max-width: 700px;
+      margin: 40px auto;
       padding: 30px;
       background: white;
       border-radius: 15px;
@@ -22,76 +25,117 @@
       padding: 15px;
       margin-top: 20px;
     }
+    table {
+      margin-top: 30px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+    th {
+      background-color: #28a745;
+      color: white;
+      text-align: center;
+    }
+    td {
+      background: #ffffff;
+      text-align: center;
+    }
+    nav a {
+      color: #333;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav a:hover, nav a.active {
+      color: #28a745;
+    }
   </style>
 </head>
 <body>
-
 
 <header class="bg-white shadow-sm py-3">
   <div class="container d-flex justify-content-between align-items-center">
     <h4 class="mb-0 fw-bold text-success">AgroLink</h4>
     <nav>
-     <a href="/" class="active">Home</a>
-    <a href="{{ url_for('agro_services') }}">Agro Services</a>
-    <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
-    <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
-    <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
-    <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
-    <a href="{{ url_for('contact') }}">Contact</a>
+      <a href="/" class="active">Home</a>
+      <a href="{{ url_for('agro_services') }}">Agro Services</a>
+      <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+      <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
+      <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
+      <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
     </nav>
   </div>
 </header>
 
+<div class="container form-container">
+  <h3 class="text-center text-success mb-4">🌿 AI Crop Rotation Planner</h3>
 
-  <div class="container form-container">
-    <h3 class="text-center text-success mb-4">🌿 AI Crop Rotation Planner</h3>
-
-    <form method="POST" action="/crop_rotation">
-      <div class="form-group">
-        <label>Soil Type</label>
-        <select name="soil" class="form-control" required>
-          <option value="">--Select--</option>
-          <option>Loamy</option>
-          <option>Clay</option>
-          <option>Sandy</option>
-          <option>Black</option>
-          <option>Alluvial</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Region</label>
-        <input type="text" name="region" class="form-control" placeholder="e.g. Tamil Nadu, Punjab" required>
-      </div>
-
-      <div class="form-group">
-        <label>Season</label>
-        <select name="season" class="form-control" required>
-          <option value="">--Select--</option>
-          <option>Kharif</option>
-          <option>Rabi</option>
-          <option>Zaid</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Last Grown Crop</label>
-        <input type="text" name="last_crop" class="form-control" placeholder="e.g. Rice, Wheat" required>
-      </div>
-
-      <button type="submit" class="btn btn-success btn-block">🚀 Suggest Rotation</button>
-    </form>
-
-    {% if suggestion %}
-    <div class="result-box mt-4">
-      <h5 class="text-success">🌾 Suggested Crop Rotation Plan:</h5>
-      <p>{{ suggestion }}</p>
+  <form method="POST" action="/crop_rotation">
+    <div class="form-group">
+      <label>Soil Type</label>
+      <input type="text" name="soil" class="form-control" placeholder="e.g. Loamy, Clay, Sandy" required>
     </div>
-    {% endif %}
 
-    <div class="text-center mt-3">
-      <a href="/" class="btn btn-outline-secondary">⬅ Home</a>
+    <div class="form-group">
+      <label>Region</label>
+      <input type="text" name="region" class="form-control" placeholder="e.g. Tamil Nadu, Punjab" required>
+    </div>
+
+    <div class="form-group">
+      <label>Season</label>
+      <input type="text" name="season" class="form-control" placeholder="e.g. Kharif, Rabi, Zaid" required>
+    </div>
+
+    <div class="form-group">
+      <label>Last Grown Crop</label>
+      <input type="text" name="last_crop" class="form-control" placeholder="e.g. Rice, Wheat" required>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">🚀 Suggest Rotation</button>
+  </form>
+
+  {% if suggestion %}
+  <div class="result-box mt-4">
+    <h5 class="text-success">🌾 Suggested Crop Rotation Plan:</h5>
+    <p>{{ suggestion }}</p>
+  </div>
+  {% endif %}
+
+  {% if rotation_data %}
+  <div class="mt-5">
+    <h5 class="text-center text-success mb-3">📊 Crop Rotation History</h5>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Soil Type</th>
+            <th>Region</th>
+            <th>Season</th>
+            <th>Last Grown Crop</th>
+            <th>Suggested Rotation Crop</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in rotation_data %}
+          <tr>
+            <td>{{ entry['Soil Type'] }}</td>
+            <td>{{ entry['Region'] }}</td>
+            <td>{{ entry['Season'] }}</td>
+            <td>{{ entry['Last Grown Crop'] }}</td>
+            <td class="text-success font-weight-bold">{{ entry['Suggested Rotation Crop'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
+  {% endif %}
+
+  <div class="text-center mt-3">
+    <a href="/" class="btn btn-outline-secondary">⬅ Home</a>
+  </div>
+</div>
+
 </body>
 </html>

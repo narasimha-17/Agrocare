@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather-Based Crop Recommendations</title>
+  <title>Weather Forecast</title>
   <style>
     /* ======== GLOBAL ======== */
     body {
@@ -99,7 +99,6 @@
       100% { box-shadow: 0 0 8px #fff, 0 0 16px #fbbf24, 0 0 30px #f59e0b; }
     }
 
-    /* ======== HEADINGS ======== */
     h2 {
       text-align: center;
       font-size: 28px;
@@ -108,7 +107,6 @@
       margin-bottom: 20px;
     }
 
-    /* ======== FORM ======== */
     form input {
       width: 100%;
       padding: 14px 16px;
@@ -145,7 +143,6 @@
       box-shadow: 0 5px 15px rgba(217,119,6,0.4);
     }
 
-    /* ======== RECOMMENDATION BOX ======== */
     .recommend-box {
       margin-top: 25px;
       padding: 20px;
@@ -172,7 +169,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ======== RESPONSIVE ======== */
     @media (max-width: 640px) {
       nav {
         flex-direction: column;
@@ -184,6 +180,7 @@
   </style>
 </head>
 <body>
+
   <!-- Animated Circles -->
   <div class="circle"></div>
   <div class="circle"></div>
@@ -195,33 +192,36 @@
   <nav>
     <h1>AgroSmart</h1>
     <div>
-    <a href="/" class="active">Home</a>
-    <a href="{{ url_for('agro_services') }}">Agro Services</a>
-    <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
-    <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
-    <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
-    <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
-    <a href="{{ url_for('contact') }}">Contact</a>
+      <a href="/" class="active">Home</a>
+      <a href="{{ url_for('agro_services') }}">Agro Services</a>
+      <a href="{{ url_for('detect_disease') }}">Detect Diseases</a>
+      <a href="{{ url_for('subsidy') }}">Subsidy & Loans</a>
+      <a href="{{ url_for('crop_guide') }}">Crop Guide</a>
+      <a href="{{ url_for('price_tracking') }}">Price Tracking</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
     </div>
   </nav>
 
-  <!-- Dynamic Recommendation Card -->
+  <!-- Weather Card -->
   <section style="flex-grow:1; display:flex; align-items:center; justify-content:center; padding:40px; position:relative; z-index:10;">
     <div class="glass">
-      <h2>Weather-Based Recommendations</h2>
+      <h2>Weather Forecast</h2>
 
-      <form method="POST" action="/weather-recommendation">
-        <input name="location" placeholder="Enter your location" required />
-        <button type="submit">Get Recommendations</button>
+      <form method="POST" action="/weather">
+        <input type="text" name="city" placeholder="Enter city" required />
+        <button type="submit">Get Weather</button>
       </form>
 
-      {% if recommendation %}
+      {% if weather %}
       <div class="recommend-box">
-        <h3>Recommendation:</h3>
-        <p>{{ recommendation }}</p>
+        <h3>Weather in {{ city }}</h3>
+        <p>🌡 Temperature: {{ weather.temperature }} °C</p>
+        <p>💧 Humidity: {{ weather.humidity }}%</p>
+        <p>☁ Condition: {{ weather.condition }}</p>
       </div>
       {% endif %}
     </div>
   </section>
+
 </body>
 </html>

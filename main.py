@@ -24,15 +24,18 @@ import requests
 import yfinance as yf
 
 
+
 app = Flask(__name__)
 CORS(app)
+
+app = Flask(__name__)
 
 
 app.secret_key = "buddenarasimhasuryateja17042006" 
 # ✅ Load your Gemini API key (replace with your key)
-#GOOGLE_API_KEY = "AIzaSyDCToalcS0jGdZyNiFxRnJOnDkoWCYd6zA"
-genai.configure(api_key="AIzaSyC6DYfBEVxzBfFFT5tIBSHpsWRblx0_v5A")
-model = genai.GenerativeModel("gemini-2.0-flash")
+# GOOGLE_API_KEY = "AIzaSyDCToalcS0jGdZyNiFxRnJOnDkoWCYd6zA"
+genai.configure(api_key="AIzaSyDCToalcS0jGdZyNiFxRnJOnDkoWCYd6zA")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 
 # Babel config
@@ -66,7 +69,7 @@ def clear_upload_folder(folder_path):
 
 # Load the model
 with open('trained models/plant_disease_btvgg16model.pkl', 'rb') as f:
-    model = pickle.load(f)
+    plant_disease_model = pickle.load(f)
 # Define image size and labels (either hardcode or extract from dataset)
 IMAGE_SIZE = 128
 LABELS = [
@@ -76,8 +79,76 @@ LABELS = [
     ]
 
 
+
+
+
+CSV_PATH = r"Datasets/synthetic_pest_pesticide_expanded_imbalanced.csv"
+pesticide_df = pd.read_csv(CSV_PATH, encoding='utf-8-sig')
+
+
+# Use the correct absolute path to your CSV
+"""CSV_PATH = r"Datasets/synthetic_pest_pesticide_expanded_imbalanced.csv"
+df = pd.read_csv(CSV_PATH, encoding='utf-8-sig')
+# Example: rename column if actual name is different
+df.rename(columns={'pestname ': 'PestName'}, inplace=True)
+print(df.columns.tolist())
+"""
+
+# utf-8-sig removes BOM if present
+
+    
+
+DATASET_PATH = "Datasets/ai_crop_rotation_planner (2).xlsx"
+
+#rotation_data = pd.read_excel(DATASET_PATH, engine='openpyxl')
+
+# --- Load your trained machine learning model ---
+MODEL_PATH = "trained models/best_crop_rotation_model.pkl"
+model = joblib.load(MODEL_PATH)
+
+
+
+soil_model = joblib.load("trained models/best_soil_health_model.pkl")
+soil_model_features = pickle.load(open("trained models/soil_features.pkl", "rb"))
+
+
+
+
+
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+import joblib
+
+# Load training data
+rotation_data = pd.read_excel(DATASET_PATH, engine='openpyxl')
+categorical_features = ['Soil Type', 'Region', 'Season', 'Last Grown Crop']
+target = 'Suggested Rotation Crop'
+
+# Label encode categorical features
+label_encoders = {}
+for col in categorical_features:
+    le = LabelEncoder()
+    rotation_data[col] = le.fit_transform(rotation_data[col])
+    label_encoders[col] = le
+
+# Train model
+X = rotation_data[categorical_features]
+y = rotation_data[target]
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X, y)
+
+# Save model and encoders
+joblib.dump(model, "trained models/best_crop_rotation_model.pkl")
+joblib.dump(label_encoders, "trained models/label_encoders.pkl")
+
+
+
+
+
 # ✅ Detect Diseases page
-@app.route("/detect-disease", methods=["GET", "POST"])
+'''@app.route("/detect-disease", methods=["GET", "POST"])
 def detect_disease():
     prediction = None
     image_url = None
@@ -106,7 +177,32 @@ def detect_disease():
             image_url = filename
 
     return render_template("detect_disease.html", prediction=prediction, image_url=image_url)
+'''
+@app.route("/detect-disease", methods=["GET", "POST"])
+def detect_disease():
+    prediction = None
+    image_url = None
 
+    if request.method == "POST":
+        file = request.files.get("image")
+        if file:
+            clear_upload_folder(app.config['UPLOAD_FOLDER'])
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+            filename = file.filename
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+
+            img = load_img(filepath, target_size=(IMAGE_SIZE, IMAGE_SIZE))
+            img_array = img_to_array(img) / 255.0
+            img_array = np.expand_dims(img_array, axis=0)
+
+            preds = plant_disease_model.predict(img_array)
+            class_index = np.argmax(preds)
+            prediction = LABELS[class_index]
+            image_url = filename
+
+    return render_template("detect_disease.html", prediction=prediction, image_url=image_url)
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -220,19 +316,173 @@ def price_commodity():
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-@app.route("/crop-rotation")
+
+@app.route("/crop_rotation", methods=["GET", "POST"])
 def crop_rotation():
-    return render_template("crop_rotation.html")
+    suggestion = None
+
+    if request.method == "POST":
+        soil = request.form["soil"]
+        region = request.form["region"]
+        season = request.form["season"]
+        last_crop = request.form["last_crop"]
+
+        # Prepare input DataFrame
+        input_df = pd.DataFrame([{
+            "Soil Type": soil,
+            "Region": region,
+            "Season": season,
+            "Last Grown Crop": last_crop
+        }])
+
+        # Transform input using label encoders, ignore unknown categories
+        transformed_df = input_df.copy()
+        for col, le in label_encoders.items():
+            # Map unknown categories to a default (e.g., first label)
+            transformed_df[col] = transformed_df[col].apply(
+                lambda x: le.transform([x])[0] if x in le.classes_ else 0
+            )
+
+        # Predict
+        try:
+            predicted_crop = model.predict(transformed_df)[0]
+            suggestion = (
+                f"For {soil} soil in {region} during {season}, "
+                f"after {last_crop}, the best rotation crop is:{predicted_crop}."
+            )
+        except Exception as e:
+            suggestion = f"⚠️ Model error: {e}"
+
+    rotation_records = rotation_data.to_dict(orient="records")
+
+    return render_template(
+        "crop_rotation.html",
+        suggestion=suggestion,
+        
+    )
+
 
 # ✅ Pesticide Suggestion page
-@app.route("/pesticide")
+
+
+
+@app.route("/pesticide", methods=["GET", "POST"])
 def pesticide():
-    return render_template("pesticide.html")
+    """
+    Handles pest and crop selection form and shows pesticide recommendation.
+    Keeps dropdown selections and result visible after submission.
+    """
+
+    try:
+        pests = sorted(pesticide_df['PestName'].unique())
+        hostcrops = sorted(pesticide_df['HostCrop'].unique())
+    except KeyError as e:
+        print(f"ERROR: Column not found. Details: {e}")
+        pests = ["Error loading data"]
+        hostcrops = ["Error loading data"]
+
+    prediction = None
+    selected_pest = None
+    selected_crop = None
+
+    if request.method == "POST":
+        selected_pest = request.form.get("pest")
+        selected_crop = request.form.get("hostcrop")
+
+        # Filter based on selections
+        result = pesticide_df[
+            (pesticide_df['PestName'] == selected_pest) &
+            (pesticide_df['HostCrop'] == selected_crop)
+        ]
+
+        if not result.empty:
+            prediction = {
+                "pesticide": result.iloc[0]['RecommendedPesticide'],
+                "method": result.iloc[0]['ApplicationMethod']
+            }
+        else:
+            prediction = {"pesticide": "No recommendation found", "method": "-"}
+
+    # Pass selections and result back to template
+    return render_template(
+        "pesticide.html",
+        pests=pests,
+        hostcrops=hostcrops,
+        prediction=prediction,
+        selected_pest=selected_pest,
+        selected_crop=selected_crop
+    )
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+@app.route("/soil-prediction", methods=["GET", "POST"])
+def soil_health():
+    soil_prediction = None
+
+    if request.method == "POST":
+        try:
+            # Collect form data
+            form_data = {
+                "SoilType": request.form["SoilType"],
+                "pH_Range": request.form["pH_Range"],
+                "OC_Level": request.form["OC_Level"],
+                "N_Level": request.form["N_Level"],
+                "P_Level": request.form["P_Level"],
+                "K_Level": request.form["K_Level"]
+            }
+
+            input_df = pd.DataFrame([form_data])
+
+            # One-hot encode
+            input_encoded = pd.get_dummies(input_df)
+
+            # Reindex to match training columns
+            input_encoded = input_encoded.reindex(columns=soil_model_features, fill_value=0)
+
+            # Predict
+            prediction = soil_model.predict(input_encoded)[0]
+            soil_prediction = f"🌱 Predicted Soil is Health: {prediction}"
+
+        except Exception as e:
+            soil_prediction = f"⚠️ Model error: {e}"
+
+    return render_template("soilhealthprediction.html", soil_prediction=soil_prediction)
+
+
+
+
+
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # ✅ Weather Suggestion page
-@app.route("/weather")
+@app.route("/weather", methods=["GET", "POST"])
 def weather():
-    return render_template("weather.html")
+    weather = None
+    city = None
+
+    if request.method == "POST":
+        city = request.form.get("city")
+        API_KEY = "dd05d85b1397672526d14d00a6903e9f"  # 🔑 replace with your OpenWeatherMap API key
+        URL = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
+
+        try:
+            response = requests.get(URL).json()
+            weather = {
+                "temperature": response["main"]["temp"],
+                "humidity": response["main"]["humidity"],
+                "condition": response["weather"][0]["description"]
+            }
+        except Exception as e:
+            weather = {
+                "temperature": "N/A",
+                "humidity": "N/A",
+                "condition": "Location not found"
+            }
+
+    return render_template("weather.html", weather=weather, city=city)
 
 
 
@@ -299,9 +549,7 @@ def crop_guide():
     return render_template("cropGuide.html")
 
 
-@app.route("/soil_health")
-def soil_health():
-    return render_template("soilhealthprediction.html")
+
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

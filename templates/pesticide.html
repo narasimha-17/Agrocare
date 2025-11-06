@@ -12,7 +12,6 @@
       color: #222;
     }
 
-    /* NAVIGATION BAR */
     .navbar {
       background-color: #2e7d32;
       padding: 15px 30px;
@@ -45,7 +44,6 @@
       color: #c8e6c9;
     }
 
-    /* CONTAINER */
     .container {
       max-width: 600px;
       margin: 50px auto;
@@ -110,7 +108,7 @@
 </head>
 <body>
 
-  <!-- NAVIGATION BAR (Same as index) -->
+  <!-- NAVIGATION BAR -->
   <div class="navbar">
     <a class="brand" href="/">AgroSmart</a>
     <div class="navbar-links">
@@ -118,25 +116,41 @@
       <a href="{{ url_for('agro_services') }}">Agro Services</a>
       <a href="{{ url_for('detect_disease') }}">Disease Detection</a>
       <a href="{{ url_for('contact') }}">Contact</a>
-
     </div>
   </div>
 
   <!-- MAIN CONTENT -->
-  <div class="container">
-    <h2>Pesticide Suggestion</h2>
-    <form method="POST" action="/predict_pesticide">
-      <label for="pest">Pest Detected</label>
-      <input type="text" id="pest" name="pest" placeholder="e.g., Aphids, Whiteflies, Mealybugs" required />
-      <button type="submit">Get Suggestion</button>
-    </form>
+<div class="container">
+  <h2>Pesticide Suggestion</h2>
 
-    {% if prediction %}
-      <div class="result">
-        <strong>Suggested Pesticide:</strong> {{ prediction }}
-      </div>
-    {% endif %}
+  <form method="POST" action="/pesticide">
+    <label for="pest">Enter Pest Name</label>
+    <input 
+      type="text" 
+      id="pest" 
+      name="pest" 
+      placeholder="e.g., Aphids" 
+      value="{{ selected_pest or '' }}" 
+      required 
+    />
+
+    <label for="hostcrop">Enter Host Crop</label>
+    <input 
+      type="text" 
+      id="hostcrop" 
+      name="hostcrop" 
+      placeholder="e.g., Tomato" 
+      value="{{ selected_crop or '' }}" 
+      required 
+    />
+
+    <button type="submit">Get Suggestion</button>
+  </form>
+
+  {% if prediction %}
+  <div class="result" style="margin-top: 20px;">
+    <strong>Suggested Pesticide:</strong> {{ prediction.pesticide }}<br />
+    <strong>Application Method:</strong> {{ prediction.method }}
   </div>
-
-</body>
-</html>
+  {% endif %}
+</div>

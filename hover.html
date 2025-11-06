@@ -1,146 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Commodity Price Predictor</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LawConnect Community</title>
   <style>
-    .prediction-result {
-      background-color: #e6f4ea;
-      color: #1b5e20;
-      border: 1px solid #a5d6a7;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 10px;
-      font-size: 1.2rem;
-      font-weight: 500;
-      box-shadow: 0 4px 8px rgba(0, 128, 0, 0.1);
-      animation: fadeIn 0.4s ease-in;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    body {
+      background: linear-gradient(120deg, #1a1a2e, #16213e, #0f3460);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      color: #00bcd4;
+      font-weight: 700;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #00bcd4;
+    }
+
+    .container {
+      padding: 3rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #00bcd4;
+      text-align: center;
+    }
+
+    /* --- Community Posts --- */
+    .post-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 15px rgba(0, 188, 212, 0.3);
+      transition: 0.3s ease;
+    }
+
+    .post-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(0, 188, 212, 0.5);
+    }
+
+    .post-author {
+      font-weight: 600;
+      color: #ffd369;
+      margin-bottom: 0.5rem;
+    }
+
+    .post-content {
+      line-height: 1.6;
+      color: #eee;
+    }
+
+    .post-actions {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
     }
 
     button {
-      margin: 5px 10px 0 0;
-      padding: 10px 16px;
-      font-size: 14px;
-      cursor: pointer;
+      background: #00bcd4;
+      color: #fff;
       border: none;
-      border-radius: 6px;
-      background-color: #4CAF50;
-      color: white;
-      transition: background-color 0.2s;
+      padding: 0.5rem 1.2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    button:hover { background-color: #45a049; }
+    button:hover {
+      background: #ffd369;
+      color: #000;
+    }
+
+    /* --- Create Post Section --- */
+    .create-post {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 2rem;
+      border-radius: 12px;
+      margin-top: 2rem;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      resize: none;
+      outline: none;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    /* --- Resources Section --- */
+    .resources {
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .resources h2 {
+      color: #ffd369;
+      margin-bottom: 1.5rem;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .resource-card {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 0 15px rgba(255, 211, 105, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 20px rgba(255, 211, 105, 0.6);
+    }
+
+    .resource-card h3 {
+      color: #00bcd4;
+      margin-bottom: 0.8rem;
+    }
+
+    .resource-card p {
+      color: #ddd;
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .resource-card a {
+      text-decoration: none;
+      color: #ffd369;
+      font-weight: 600;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.3);
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      color: #ccc;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
-<body class="bg-gradient-to-br from-green-100 via-white to-green-50 min-h-screen">
+<body>
 
-  <!-- NAVBAR -->
-  <nav class="bg-green-700 text-white shadow-md px-6 py-4">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <a href="/" class="text-2xl font-bold">AgroSmart</a>
-      <div class="space-x-6 text-sm md:text-base">
-        <a href="/" class="hover:text-green-200">Home</a>
-        <a href="{{ url_for('agro_services') }}" class="hover:text-green-200">Agro Services</a>
-        <a href="{{ url_for('detect_disease') }}" class="hover:text-green-200">Disease Detection</a>
-        <a href="{{ url_for('contact') }}" class="hover:text-green-200">Contact</a>
+  <header>
+    <h1>LawConnect Community</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#">Cases</a>
+      <a href="community.html">Community</a>
+      <a href="#">Chatbot</a>
+      <a href="#">Login</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Community Discussions</h2>
+
+    <div class="post-box">
+      <div class="post-author">@LegalEagle</div>
+      <div class="post-content">
+        How should students approach landmark case studies effectively? 
+        Any recommendations on resources or structured study methods?
+      </div>
+      <div class="post-actions">
+        <button>Like</button>
+        <button>Reply</button>
+        <button>Share</button>
       </div>
     </div>
-  </nav>
 
-  <!-- MAIN FORM -->
-  <div class="flex items-center justify-center px-4 py-10">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-8">
-      <h2 class="text-3xl font-bold text-green-700 text-center mb-6">Commodity Price Predictor</h2>
-
-      <!-- Voice Input Button -->
-      <div class="flex items-center mb-4">
-        <input type="text" id="commodity" name="commodity" placeholder="Say or type commodity name"
-               value="{{ request.form.get('commodity', '') }}"
-               class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
-        <button type="button" id="micBtn">🎤 Speak</button>
+    <div class="post-box">
+      <div class="post-author">@Adv_Riya</div>
+      <div class="post-content">
+        I’m offering free mentoring sessions on argument building and client briefing. 
+        Drop your queries here or DM for guidance!
       </div>
-
-      <form id="priceForm" method="POST" action="/price-commodity" class="space-y-4">
-        <div>
-          <label for="state" class="block font-medium text-gray-700">State:</label>
-          <input type="text" name="state" id="state" value="{{ request.form.get('state', '') }}" required
-                 class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
-        </div>
-
-        <div>
-          <label for="district" class="block font-medium text-gray-700">District:</label>
-          <input type="text" name="district" id="district" value="{{ request.form.get('district', '') }}" required
-                 class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
-        </div>
-
-        <div>
-          <label for="market" class="block font-medium text-gray-700">Market:</label>
-          <input type="text" name="market" id="market" value="{{ request.form.get('market', '') }}" required
-                 class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
-        </div>
-
-        <div>
-          <label for="variety" class="block font-medium text-gray-700">Variety:</label>
-          <input type="text" name="variety" id="variety" value="{{ request.form.get('variety', '') }}"
-                 class="w-full border rounded-md p-2 focus:ring focus:ring-green-300" />
-        </div>
-
-        <button type="submit" class="w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition duration-200">
-          Predict Price
-        </button>
-        <button type="button" onclick="resetForm()">Reset</button>
-      </form>
-
-      <!-- Prediction Result -->
-      {% if prediction %}
-        <div class="prediction-result" id="prediction-container">
-          <p>💰 Predicted Modal Price: ₹{{ prediction }}</p>
-        </div>
-        <script>
-          // Voice output for prediction
-          const utterance = new SpeechSynthesisUtterance("Predicted price is {{ prediction }} rupees");
-          utterance.lang = navigator.language || 'en-US';
-          speechSynthesis.speak(utterance);
-        </script>
-      {% endif %}
-
+      <div class="post-actions">
+        <button>Like</button>
+        <button>Reply</button>
+        <button>Share</button>
+      </div>
     </div>
+
+    <div class="create-post">
+      <h2>Share Your Thoughts</h2>
+      <textarea rows="5" placeholder="Post your legal question or case discussion..."></textarea>
+      <button>Post</button>
+    </div>
+
+    <!-- Resources Section -->
+    <section class="resources">
+      <h2>📚 Resources & Best Practices</h2>
+      <div class="resource-grid">
+        <div class="resource-card">
+          <h3>Case Analysis Techniques</h3>
+          <p>Learn how to break down complex judgments and identify key precedents using logical frameworks.</p>
+          <a href="#">Read Guide →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Legal Writing & Drafting</h3>
+          <p>Master writing skills for petitions, contracts, and case summaries — essential for all aspiring lawyers.</p>
+          <a href="#">View Resources →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>AI Tools for Law Students</h3>
+          <p>Use AI-powered research assistants and chatbots to enhance your study and case preparation.</p>
+          <a href="#">Explore Tools →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Internship Preparation</h3>
+          <p>Step-by-step guide to building your CV, finding internships, and networking with advocates.</p>
+          <a href="#">Start Learning →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Mock Court Practices</h3>
+          <p>Engage in simulated case trials and peer debates to enhance courtroom presentation skills.</p>
+          <a href="#">Join a Session →</a>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <!-- VOICE INPUT SCRIPT -->
-  <script>
-    const micBtn = document.getElementById("micBtn");
-    const commodityInput = document.getElementById("commodity");
-    micBtn.addEventListener('click', () => {
-      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.lang = navigator.language || 'en-US';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-      recognition.start();
-
-      recognition.onresult = (event) => {
-        const speechResult = event.results[0][0].transcript.toLowerCase();
-        commodityInput.value = speechResult;
-      };
-
-      recognition.onerror = (event) => {
-        alert("🎙️ Voice input error: " + event.error);
-      };
-    });
-
-    // Reset function
-    function resetForm() {
-      document.getElementById("priceForm").reset();
-      const predictionContainer = document.getElementById("prediction-container");
-      if (predictionContainer) predictionContainer.style.display = "none";
-    }
-  </script>
+  <footer>
+    © 2025 LawConnect | Empowering Legal Learning & Practice
+  </footer>
 
 </body>
 </html>

@@ -149,10 +149,11 @@
       background: rgba(255,255,255,0.95);
       border-radius: 20px;
       padding: 20px;
-      width: 220px;
+      width: 250px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       transition: transform 0.3s, box-shadow 0.3s;
       animation: fadeUp 0.8s ease-in-out;
+      text-align: left;
     }
 
     .member-card:hover {
@@ -160,31 +161,16 @@
       box-shadow: 0 14px 28px rgba(0,0,0,0.2);
     }
 
-    .member-card img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin-bottom: 12px;
-      border: 3px solid #1565c0;
+    .member-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 20px;
+      color: #1b5e20;
     }
 
-    /* ======== HOME BUTTON ======== */
-    .home-button {
-      margin: 50px auto;
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-weight: 600;
-      background: linear-gradient(90deg, #1565c0, #2e7d32);
-      color: white;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s ease;
-    }
-
-    .home-button:hover {
-      background: linear-gradient(90deg, #0d47a1, #1b5e20);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    .member-card p {
+      font-size: 16px;
+      color: #444;
+      line-height: 1.4;
     }
 
     /* ======== ANIMATIONS ======== */
@@ -268,32 +254,30 @@
 
     <div class="team-members">
       <div class="member-card">
-        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Manas">
-        <h3>Manas</h3>
-        <p>AI integration, backend logic, and system design.</p>
+        <h3>Manas Chintalapudi</h3>
+        <h4>RA2311026010647</h4>
+        <p>Expert in AI integration and backend logic. Designed the core system architecture and handled model integration for crop disease detection.</p>
       </div>
 
       <div class="member-card">
-        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Narasimha">
         <h3>Narasimha</h3>
-        <p>Flask web framework, ML pipeline, and deployment.</p>
+        <h4>RA2311026010658</h4>
+        <p>Specialist in Flask web framework and ML pipelines. Developed backend APIs and integrated machine learning models for soil and crop prediction.</p>
       </div>
 
       <div class="member-card">
-        <img src="https://randomuser.me/api/portraits/men/66.jpg" alt="Mitta Vinay Krishna Reddy">
         <h3>Mitta Vinay Krishna Reddy</h3>
-        <p>Crop prediction logic and data workflow engineering.</p>
+        <h4>RA2311026010661</h4>
+        <p>Data engineer and crop prediction specialist. Managed datasets, preprocessing, and designed prediction algorithms for optimal crop recommendations.</p>
       </div>
 
       <div class="member-card">
-        <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="Tharun D">
-        <h3>Tharun D</h3>
-        <p>UI/UX design, responsive pages, and frontend styling.</p>
+        <h3>Tharun Dhanekula</h3>
+        <h4>RA2311026010655</h4>
+        <p>UI/UX designer and frontend expert. Created responsive, user-friendly interfaces and ensured smooth user experience across devices.</p>
       </div>
     </div>
   </section>
-
- 
 
 </body>
 </html>
