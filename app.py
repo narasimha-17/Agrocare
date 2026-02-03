@@ -3,7 +3,7 @@ from random import random
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
 from flask_babel import Babel, _
-import google.generativeai as genai
+#import google.generativeai as genai
 import os
 import pickle
 import numpy as np
@@ -491,7 +491,7 @@ def contact():
 
 
 # --- UPDATE YOUR ASK ROUTE ---
-@app.route("/ask", methods=["POST"])
+'''@app.route("/ask", methods=["POST"])
 def ask():
     try:
         data = request.get_json()
@@ -514,6 +514,11 @@ def ask():
         print(f"--- GEMINI DEBUG ERROR: {e} ---")
         return jsonify({"reply": f"❌ API Error: {str(e)}"}), 500
     
+'''
+
+@app.route("/ask", methods=["POST"])
+def ask():
+    return jsonify({"reply": "🤖 Chatbot temporarily disabled"}), 200
 
 
 
