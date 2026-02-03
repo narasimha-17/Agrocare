@@ -4,20 +4,14 @@ from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
 from flask_babel import Babel, _
 import google.generativeai as genai
-
 import os
 import pickle
 import numpy as np
-
 import pandas as pd
 import joblib
 from sklearn.preprocessing import LabelEncoder , StandardScaler
-from torchvision import transforms
-import torch
-from PIL import Image
 import os
 from PIL import Image
-
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import requests
 import yfinance as yf
