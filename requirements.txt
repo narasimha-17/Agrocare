@@ -11,3 +11,4 @@ pillow
 requests
 yfinance
 google-generativeai
+openpyxl>=3.1.2
