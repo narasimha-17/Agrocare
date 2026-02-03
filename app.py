@@ -26,7 +26,7 @@ CORS(app)
 app.secret_key = "buddenarasimhasuryateja17042006" 
 # ✅ Load your Gemini API key (replace with your key)
 # GOOGLE_API_KEY = "AIzaSyDCToalcS0jGdZyNiFxRnJOnDkoWCYd6zA"
-gemini_client = genai.Client(api_key="AIzaSyCXSjoEHZ22hc8Ws-kBaCwjS09WyUe7M54")
+#gemini_client = genai.Client(api_key="AIzaSyCXSjoEHZ22hc8Ws-kBaCwjS09WyUe7M54")
 
 
 
