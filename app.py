@@ -25,8 +25,8 @@ CORS(app)
 
 app.secret_key = "buddenarasimhasuryateja17042006" 
 # ✅ Load your Gemini API key (replace with your key)
-# GOOGLE_API_KEY = "AIzaSyDCToalcS0jGdZyNiFxRnJOnDkoWCYd6zA"
-#gemini_client = genai.Client(api_key="AIzaSyCXSjoEHZ22hc8Ws-kBaCwjS09WyUe7M54")
+
+#
 
 
 
@@ -60,7 +60,7 @@ def clear_upload_folder(folder_path):
                 os.remove(file_path)
 
 # Load the model
-with open('trained models/plant_disease_btvgg16model.pkl', 'rb') as f:
+'''with open('trained models/plant_disease_btvgg16model.h5', 'rb') as f:
     plant_disease_model = pickle.load(f)
 # Define image size and labels (either hardcode or extract from dataset)
 IMAGE_SIZE = 128
@@ -72,7 +72,7 @@ LABELS = [
 
 
 
-
+'''
 
 CSV_PATH = r"Datasets/synthetic_pest_pesticide_expanded_imbalanced.csv"
 pesticide_df = pd.read_csv(CSV_PATH, encoding='utf-8-sig')
