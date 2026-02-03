@@ -8,7 +8,7 @@ import google.generativeai as genai
 import os
 import pickle
 import numpy as np
-from openai import models
+
 import pandas as pd
 import joblib
 from sklearn.preprocessing import LabelEncoder , StandardScaler
