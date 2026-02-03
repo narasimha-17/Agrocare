@@ -12,7 +12,7 @@ import joblib
 from sklearn.preprocessing import LabelEncoder , StandardScaler
 import os
 from PIL import Image
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
+#from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import requests
 import yfinance as yf
 
