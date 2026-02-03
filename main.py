@@ -3,16 +3,23 @@ from random import random
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
 from flask_babel import Babel, _
-#import google.generativeai as genai
+from google import genai
 import os
 import pickle
 import numpy as np
+from openai import models
 import pandas as pd
 import joblib
 from sklearn.preprocessing import LabelEncoder , StandardScaler
+from torchvision import transforms
+import torch
+from PIL import Image
 import os
 from PIL import Image
-#from tensorflow.keras.preprocessing.image import load_img, img_to_array
+import torch
+import torchvision.models as models
+from torchvision import transforms
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import requests
 import yfinance as yf
 
@@ -25,8 +32,8 @@ CORS(app)
 
 app.secret_key = "buddenarasimhasuryateja17042006" 
 # ✅ Load your Gemini API key (replace with your key)
-
-#
+# GOOGLE_API_KEY = "AIzaSyDCToalcS0jGdZyNiFxRnJOnDkoWCYd6zA"
+gemini_client = genai.Client(api_key="AIzaSyCXSjoEHZ22hc8Ws-kBaCwjS09WyUe7M54")
 
 
 
@@ -60,7 +67,7 @@ def clear_upload_folder(folder_path):
                 os.remove(file_path)
 
 # Load the model
-'''with open('trained models/plant_disease_btvgg16model.h5', 'rb') as f:
+with open('trained models/plant_disease_btvgg16model.pkl', 'rb') as f:
     plant_disease_model = pickle.load(f)
 # Define image size and labels (either hardcode or extract from dataset)
 IMAGE_SIZE = 128
@@ -72,7 +79,7 @@ LABELS = [
 
 
 
-'''
+
 
 CSV_PATH = r"Datasets/synthetic_pest_pesticide_expanded_imbalanced.csv"
 pesticide_df = pd.read_csv(CSV_PATH, encoding='utf-8-sig')
@@ -491,7 +498,7 @@ def contact():
 
 
 # --- UPDATE YOUR ASK ROUTE ---
-'''@app.route("/ask", methods=["POST"])
+@app.route("/ask", methods=["POST"])
 def ask():
     try:
         data = request.get_json()
@@ -514,11 +521,6 @@ def ask():
         print(f"--- GEMINI DEBUG ERROR: {e} ---")
         return jsonify({"reply": f"❌ API Error: {str(e)}"}), 500
     
-'''
-
-@app.route("/ask", methods=["POST"])
-def ask():
-    return jsonify({"reply": "🤖 Chatbot temporarily disabled"}), 200
 
 
 
@@ -644,6 +646,7 @@ def price_tracking():
 
 
 
+
+
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True)
