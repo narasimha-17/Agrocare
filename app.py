@@ -3,7 +3,7 @@ from random import random
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
 from flask_babel import Babel, _
-import google.generativeai as genai
+from google import genai
 import os
 import pickle
 import numpy as np
@@ -28,14 +28,13 @@ import yfinance as yf
 app = Flask(__name__)
 CORS(app)
 
-app = Flask(__name__)
 
 
 app.secret_key = "buddenarasimhasuryateja17042006" 
 # ✅ Load your Gemini API key (replace with your key)
 # GOOGLE_API_KEY = "AIzaSyDCToalcS0jGdZyNiFxRnJOnDkoWCYd6zA"
-genai.configure(api_key="AIzaSyDCToalcS0jGdZyNiFxRnJOnDkoWCYd6zA")
-model = genai.GenerativeModel("gemini-2.5-flash")
+gemini_client = genai.Client(api_key="AIzaSyCXSjoEHZ22hc8Ws-kBaCwjS09WyUe7M54")
+
 
 
 # Babel config
@@ -495,29 +494,33 @@ def contact():
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # ✅ Chatbot route (Gemini API)
+# --- AT THE TOP OF YOUR FILE ---
+
+
+# --- UPDATE YOUR ASK ROUTE ---
 @app.route("/ask", methods=["POST"])
 def ask():
     try:
-        # 🔹 Parse and validate the request JSON
         data = request.get_json()
         message = data.get("message", "").strip()
 
         if not message:
             return jsonify({"reply": "❌ Message is missing!"}), 400
 
-        # 🔹 Generate response from Gemini API
-        response = model.generate_content(message)
+        # ✅ 2. Use keyword arguments ONLY
+        response = gemini_client.models.generate_content(
+            model="gemini-3-flash-preview",
+            contents=message
+        )
 
-        # 🔹 Send reply back to frontend
         return jsonify({"reply": response.text})
 
     except Exception as e:
-        # 🔹 Log the error for debugging
-        print("❌ Internal Error:", str(e))
-        return jsonify({"reply": f"❌ Error from Gemini: {str(e)}"}), 500
+        # 💡 LOOK AT YOUR TERMINAL/CMD! 
+        # It will print the real reason (e.g., 401, 403, 429)
+        print(f"--- GEMINI DEBUG ERROR: {e} ---")
+        return jsonify({"reply": f"❌ API Error: {str(e)}"}), 500
     
-
-
 
 
 
@@ -644,6 +647,5 @@ def price_tracking():
 
 
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=10000)
