@@ -17,9 +17,7 @@ import torch
 from PIL import Image
 import os
 from PIL import Image
-import torch
-import torchvision.models as models
-from torchvision import transforms
+
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import requests
 import yfinance as yf
