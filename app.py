@@ -3,7 +3,8 @@ from random import random
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
 from flask_babel import Babel, _
-from google import genai
+import google.generativeai as genai
+
 import os
 import pickle
 import numpy as np
@@ -647,5 +648,6 @@ def price_tracking():
 
 
 
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(debug=True)
